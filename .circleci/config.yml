@@ -17,7 +17,6 @@ jobs:
     working_directory: /home/builder/pitchblack
     steps:
       - run:
-          name: AIO Build
           command: |
             lshw -short
             df -h 
