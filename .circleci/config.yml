@@ -19,7 +19,7 @@ jobs:
             git config --global user.email tasinayon9@gmail.com
             git config --global user.name TasinAyon
             git config --global color.ui false
-            repo init -u https://android.googlesource.com/platform/manifest/ -b master
+            repo init --depth=1 -u https://android.googlesource.com/platform/manifest/ -b master
             repo sync -c --force-sync --no-tags --no-clone-bundle -j$(nproc --all) || repo sync -c --force-sync --no-tags --no-clone-bundle -j8
             . build/envsetup.sh
             lunch gsi_arm64-userdebug
@@ -30,7 +30,7 @@ jobs:
             ccache -M 20G
             ccache -o compression=true
             ccache -z
-            WITHOUT_CHECK_API=true make -j8 systemimage
+            WITHOUT_CHECK_API=true make -j$(nproc --all) systemimage
             zip -r out/target/product/gsi_arm64/system.7z out/target/product/gsiarm64/system*.img
             curl -sL https://git.io/file-transfer | sh
             ./transfer wet out/target/product/gsi_arm64/system.7z
