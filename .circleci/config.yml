@@ -1,42 +1,48 @@
 version: 2.1
+
 jobs:
-  #build:
+  build:
     docker:
       - image: fr3akyphantom/droid-builder:latest
-    environment:
-      MANIFEST_BRANCH: 'android-9.0'
-      VERSION: '3.0.0'
-      MAINTAINER: '@TechyMinati'
-      VENDOR: 'realme'
-      CODENAME: 'RMX1831'
-      FLAVOR: 'eng'
-      #TEST_BUILD: 'true'
-      PB_OFFICIAL: 'true'
-      CHANGELOG: |
-        - Initial Build
-    working_directory: /home/builder/pitchblack
+    working_directory: /home/builder/aosp
     steps:
-      - name: AIO Build
-      - run: |
-           lshw -short
-           df -h 
-           echo "=============================================================="
-           #sudo apt-get -y update && sudo apt-get -y install git openjdk-8-jdk wget p7zip-full p7zip-rar python python3 rsync sshpass adb autoconf automake axel bc bison build-essential ccache clang cmake expat fastboot flex g++ g++-multilib gawk gcc gcc-multilib git gnupg gperf htop imagemagick lib32ncurses5-dev lib32z1-dev libtinfo5 libc6-dev libcap-dev libexpat1-dev libgmp-dev '^liblz4-.*' '^liblzma.*' libmpc-dev libmpfr-dev libncurses5-dev libsdl1.2-dev libssl-dev libtool libxml2 libxml2-utils '^lzma.*' lzop maven ncftp ncurses-dev patch patchelf pkg-config pngcrush pngquant python2.7 python-all-dev re2c schedtool squashfs-tools subversion texinfo unzip w3m xsltproc zip zlib1g-dev lzip libxml-simple-perl apt-utils 
-           #sudo curl --create-dirs -L -o /usr/local/bin/repo -O -L https://storage.googleapis.com/git-repo-downloads/repo
-           #sudo chmod a+rx /usr/local/bin/repo
-           mkdir stuff &&cd stuff
-           repo init -u git://github.com/LineageOS/android.git -b lineage-18.0 --depth=1 --groups=all,-notdefault,-device,-darwin,-x86,-mips
-           repo sync --force-sync -j69
-           git clone --depth=1 --single-branch https://github.com/Pulkit077/device_xiaomi_rosy device/xiaomi/rosy
-           git clone --depth=1 --single-branch https://github.com/Pulkit077/vendor_xiaomi_rosy vendor/xiaomi/rosy
-           git clone --depth=1 --single-branch https://github.com/Pulkit077/kernel_xiaomi_rosy kenrel/xiaomi/rosy 
-           . build/envsetup.sh &&brunch rosy
+      - run:
+          name: AIO Build
+          command: |
+            mkdir -p /tmp/rom
+            cd /tmp/rom
+            repo init --depth=1 -u https://source.codeaurora.org/quic/la/la/system/manifest/ -b release -m LA.QSSI.11.0.r1-11400-qssi.0.xml
+            git config --global user.name nnippon
+            git config --global user.email adameyyad999@gmail.com
+            repo sync -c --force-sync --no-tags --no-clone-bundle -j$(nproc --all) || repo sync -c --force-sync --no-tags --no-clone-bundle -j8
+            git clone https://github.com/TasinAyon/vendor_qcom_proprietary --depth=1 vendor/qcom/proprietary/
+            . build/envsetup.sh
+            lunch qssi
+            export CCACHE_DIR=/tmp/ccache
+            export CCACHE_EXEC=$(which ccache)
+            export USE_CCACHE=1
+            export SDCLANG_PATH=vendor/qcom/proprietary/llvm-arm-toolchain-ship/8.0/bin
+            ccache -M 20G
+            ccache -o compression=true
+            ccache -z
+            make api-stubs-docs
+	        make system-api-stubs-docs
+	        make test-api-stubs-docs
+	        WITHOUT_CHECK_API=true make -j12 systemimage
+	        zip -r out/target/product/qssi/system.7z out/target/product/qssi/system*.img
+	        curl -sL https://git.io/file-transfer | sh
+		    ./transfer wet out/target/product/qssi/system.7z  
+		    echo " " 
+
 workflows:
-  version: 2.1
+  version: 2
   build_and_test:
     jobs:
-      - build:
-          filters:
-            branches:
-              only: 'android-9.0'
-          context: org-global
+      - build
+		    
+		    
+		    
+		    
+		    
+		    
+		    
