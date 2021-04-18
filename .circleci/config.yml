@@ -11,9 +11,9 @@ jobs:
           command: |
             mkdir -p /tmp/rom
             cd /tmp/rom
+            git config --global user.email tasinayon9@gmail.com
+            git config --global user.name TasinAyon
             repo init --depth=1 -u https://source.codeaurora.org/quic/la/la/system/manifest/ -b release -m LA.QSSI.11.0.r1-11400-qssi.0.xml
-            git config --global user.name nnippon
-            git config --global user.email adameyyad999@gmail.com
             repo sync -c --force-sync --no-tags --no-clone-bundle -j$(nproc --all) || repo sync -c --force-sync --no-tags --no-clone-bundle -j8
             git clone https://github.com/TasinAyon/vendor_qcom_proprietary --depth=1 vendor/qcom/proprietary/
             . build/envsetup.sh
