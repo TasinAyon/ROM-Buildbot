@@ -9,17 +9,17 @@ jobs:
       - run:
           name: AIO Build
           command: |
-            sudo chmod 777 /var/cache/debconf/
-            sudo chmod 777 /var/cache/debconf/passwords.dat
-            echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-            sudo apt-get -y -q update
-            sudo apt-get -y -q install bc bison build-essential curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libwxgtk3.0-gtk3-dev libxml2 libxml2-utils lunzip lzop pngcrush schedtool squashfs-tools xsltproc zip zlib1g-dev openjdk-8-jdk python perl git git-lfs libncurses5 xmlstarlet virtualenv xz-utils rr jq
+            #sudo chmod 777 /var/cache/debconf/
+            #sudo chmod 777 /var/cache/debconf/passwords.dat
+            #echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+            #sudo apt-get -y -q update
+            #sudo apt-get -y -q install bc bison build-essential curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libwxgtk3.0-gtk3-dev libxml2 libxml2-utils lunzip lzop pngcrush schedtool squashfs-tools xsltproc zip zlib1g-dev openjdk-8-jdk python perl git git-lfs libncurses5 xmlstarlet virtualenv xz-utils rr jq
             mkdir -p /tmp/rom
             cd /tmp/rom
             git config --global user.email tasinayon9@gmail.com
             git config --global user.name TasinAyon
             git config --global color.ui false
-            repo init --depth=1 -u https://source.codeaurora.org/quic/la/la/system/manifest/ -b release -m LA.QSSI.11.0.r1-11400-qssi.0.xml
+            repo init -u https://source.codeaurora.org/quic/la/la/system/manifest/ -b release -m LA.QSSI.11.0.r1-11400-qssi.0.xml
             repo sync -c --force-sync --no-tags --no-clone-bundle -j$(nproc --all) || repo sync -c --force-sync --no-tags --no-clone-bundle -j8
             git clone https://github.com/TasinAyon/vendor_qcom_proprietary --depth=1 vendor/qcom/proprietary/
             . build/envsetup.sh
@@ -31,7 +31,7 @@ jobs:
             ccache -M 20G
             ccache -o compression=true
             ccache -z
-            WITHOUT_CHECK_API=true make systemimage
+            make systemimage
             zip -r out/target/product/qssi/system.7z out/target/product/qssi/system*.img
             curl -sL https://git.io/file-transfer | sh
             ./transfer wet out/target/product/qssi/system.7z
