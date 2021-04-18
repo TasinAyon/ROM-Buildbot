@@ -18,6 +18,7 @@ jobs:
             cd /tmp/rom
             git config --global user.email tasinayon9@gmail.com
             git config --global user.name TasinAyon
+            git config --global color.ui false
             repo init --depth=1 -u https://source.codeaurora.org/quic/la/la/system/manifest/ -b release -m LA.QSSI.11.0.r1-11400-qssi.0.xml
             repo sync -c --force-sync --no-tags --no-clone-bundle -j$(nproc --all) || repo sync -c --force-sync --no-tags --no-clone-bundle -j8
             git clone https://github.com/TasinAyon/vendor_qcom_proprietary --depth=1 vendor/qcom/proprietary/
