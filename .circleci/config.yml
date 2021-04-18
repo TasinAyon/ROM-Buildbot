@@ -26,13 +26,13 @@ jobs:
             ccache -o compression=true
             ccache -z
             make api-stubs-docs
-	        make system-api-stubs-docs
-	        make test-api-stubs-docs
-	        WITHOUT_CHECK_API=true make -j12 systemimage
-	        zip -r out/target/product/qssi/system.7z out/target/product/qssi/system*.img
-	        curl -sL https://git.io/file-transfer | sh
-		    ./transfer wet out/target/product/qssi/system.7z  
-		    echo " " 
+	    make system-api-stubs-docs
+	    make test-api-stubs-docs
+	    WITHOUT_CHECK_API=true make -j12 systemimage
+	    zip -r out/target/product/qssi/system.7z out/target/product/qssi/system*.img
+	    curl -sL https://git.io/file-transfer | sh
+            ./transfer wet out/target/product/qssi/system.7z  
+            echo " " 
 
 workflows:
   version: 2
