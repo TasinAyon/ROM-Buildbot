@@ -17,6 +17,7 @@ jobs:
             sudo fallocate -l 16G /swapfile
             sudo chmod 600 /swapfile
             sudo mkswap /swapfile
+            sudo chmod 600 /swapfile
             sudo swapon /swapfile
             sudo sysctl vm.swappiness=90
             sudo swapon --show
