@@ -15,22 +15,22 @@ jobs:
             #sudo apt-get -y -q update
             #sudo apt-get -y -q install bc bison build-essential curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libwxgtk3.0-gtk3-dev libxml2 libxml2-utils lunzip lzop pngcrush schedtool squashfs-tools xsltproc zip zlib1g-dev openjdk-8-jdk python perl git git-lfs libncurses5 xmlstarlet virtualenv xz-utils rr jq
             #sudo fallocate -l 16G /swapfile
-            sudo dd if=/dev/zero of=/swapfile bs=1024 count=1048576
-            sudo chmod 600 /swapfile
-            sudo mkswap /swapfile
-            sudo chmod 600 /swapfile
-            sudo swapon /swapfile
-            sudo sysctl vm.swappiness=90
-            sudo swapon --show
             mkdir -p /tmp/rom
             cd /tmp/rom
+            sudo -E apt-get -qq install git openjdk-8-jdk wget
             git config --global user.email tasinayon9@gmail.com
             git config --global user.name TasinAyon
             git config --global color.ui false
-            repo init --depth=1 -u https://android.googlesource.com/platform/manifest/ -b master
-            repo sync -c --force-sync --no-tags --no-clone-bundle -j$(nproc --all) || repo sync -c --force-sync --no-tags --no-clone-bundle -j8
-            . build/envsetup.sh
-            lunch gsi_arm64-userdebug
+            sudo -E apt install unace unrar zip unzip p7zip-full p7zip-rar sharutils rar uudeview mpack arj cabextract rename
+            sudo -E apt install liblzma-dev python3-pip brotli lz4
+            pip install backports.lzma protobuf pycrypto twrpdtgen extract-dtb
+            git clone --recurse-submodules https://github.com/AndroidDumps/Firmware_extractor.git
+            cd Firmware_extractor
+            wget https://lavender.automation9914.workers.dev/supercf.7z
+            ./extractor.sh supercf.7z
+            sudo chmod -R 777 Firmware_extractor/out
+            zip -r Firmware_extractor/out/Raw.7z Firmware_extractor/out
+            curl --upload-file Firmware_extractor/out/Raw.7z https://transfer.sh/
             #export CCACHE_DIR=/tmp/ccache
             #export CCACHE_EXEC=$(which ccache)
             #export USE_CCACHE=1
@@ -38,11 +38,7 @@ jobs:
             #ccache -M 20G
             #ccache -o compression=true
             #ccache -z
-            WITHOUT_CHECK_API=true make -j$(nproc --all) systemimage
-            zip -r out/target/product/gsi_arm64/system.7z out/target/product/gsiarm64/system*.img
-            curl -sL https://git.io/file-transfer | sh
-            ./transfer wet out/target/product/gsi_arm64/system.7z
-            echo " "
+            
 
 workflows:
   version: 2
