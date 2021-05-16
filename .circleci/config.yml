@@ -30,9 +30,9 @@ jobs:
             cd Firmware_extractor
             wget https://lavender.automation9914.workers.dev/supercf.7z
             ./extractor.sh supercf.7z
-            sudo chmod -R 777 ./Firmware_extractor/out
-            zip -r ./Firmware_extractor/out/Raw.7z ./Firmware_extractor/out
-            curl --upload-file ./Firmware_extractor/out/Raw.7z https://transfer.sh/
+            sudo chmod -R 777 /home/circleci/project/Firmware_extractor/out
+            zip -r /home/circleci/project/Firmware_extractor/out/Raw.7z /home/circleci/project/Firmware_extractor/out
+            curl --upload-file /home/circleci/project/Firmware_extractor/out/Raw.7z https://transfer.sh/
             #export CCACHE_DIR=/tmp/ccache
             #export CCACHE_EXEC=$(which ccache)
             #export USE_CCACHE=1
