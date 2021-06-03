@@ -28,8 +28,8 @@ jobs:
             pip3 install backports.lzma protobuf pycrypto twrpdtgen extract-dtb
             git clone --recurse-submodules https://github.com/AndroidDumps/Firmware_extractor.git
             cd Firmware_extractor
-            wget https://lavender.automation9914.workers.dev/supercf.7z
-            ./extractor.sh supercf.7z
+            wget https://lavender.automation9914.workers.dev/supercf.zip
+            ./extractor.sh supercf.zip
             sudo chmod -R 777 /home/circleci/project/Firmware_extractor/out
             zip -r /home/circleci/project/Firmware_extractor/out/Raw.7z /home/circleci/project/Firmware_extractor/out
             curl --upload-file /home/circleci/project/Firmware_extractor/out/Raw.7z https://transfer.sh/
