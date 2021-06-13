@@ -39,7 +39,7 @@ jobs:
             #export SDCLANG_PATH=vendor/qcom/proprietary/llvm-arm-toolchain-ship/8.0/bin
             #ccache -M 20G
             #ccache -o compression=true
-            #ccache -z (
+            #ccache -z
             
 
 workflows:
